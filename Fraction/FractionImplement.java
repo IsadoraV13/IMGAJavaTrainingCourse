@@ -2,7 +2,7 @@ package Fraction;
 
 import java.util.stream.Stream;
 
-public class FractionImplement {
+public class FractionImplement implements Fraction{
 
     public static void main(String[] args) {
 //        new FractionImplement(1, 2);
@@ -11,7 +11,11 @@ public class FractionImplement {
 //        new FractionImplement(3, 2); // no change, num > denom
 //        new FractionImplement(-2, 4);
 //        new FractionImplement(2, -4);
-        new FractionImplement(-2, -4);
+//        new FractionImplement(-2, -4);
+        new FractionImplement("2/4");
+        new FractionImplement("-2/4");
+        new FractionImplement("2/-4");
+        new FractionImplement("-2/-4");
 //        gcd(-2, 4);
     }
 
@@ -49,8 +53,11 @@ public class FractionImplement {
         if (intArray.length > 2)  {
             throw new IllegalArgumentException("please only specify two numbers separated by '/' ");
         }
-        this.numerator = intArray[0];
-        this.denominator = 1;
+        int num = intArray[0];
+        int denom = intArray[1];
+        int [] fractionArray = normalise(num, denom);
+        this.numerator = fractionArray[0];
+        this.denominator = fractionArray[1];
     }
 
 
@@ -99,4 +106,49 @@ public class FractionImplement {
     }
 
 
+    @Override
+    public Fraction add(Fraction f) {
+        return null;
+    }
+
+    @Override
+    public Fraction subtract(Fraction f) {
+        return null;
+    }
+
+    @Override
+    public Fraction multiply(Fraction f) {
+        return null;
+    }
+
+    @Override
+    public Fraction divide(Fraction f) {
+        return null;
+    }
+
+    @Override
+    public Fraction abs() {
+        return null;
+    }
+
+    @Override
+    public Fraction negate() {
+        return null;
+    }
+
+    @Override
+    public Fraction inverse() {
+        return null;
+    }
+
+//    @Override
+//    public int compareTo(Fraction f) {
+//        return 0;
+//    }
+
+    @Override
+    public String toString() {
+        return numerator +
+                "/" + denominator;
+    }
 }

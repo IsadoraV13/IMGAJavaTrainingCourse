@@ -4,7 +4,8 @@ package Fraction;
 // The object should be immutable.
 
 
-public interface Fraction extends Comparable<Fraction> {
+public interface Fraction {
+    //extends Comparable<Fraction>
 
     public Fraction add(Fraction f);
 //    Returns a new Fraction that is the SUM of this and the parameter:
@@ -38,8 +39,8 @@ public interface Fraction extends Comparable<Fraction> {
 //    Returns true if object o is a Fraction equal to this, and false in all other cases.
 
 
-    @Override
-    public int compareTo(Fraction f);
+//    @Override
+//    public int compareTo(Fraction f);
 //    Returns:
 //      - 1 if this is less than fraction o
 //      0 if it's equal
