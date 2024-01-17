@@ -3,11 +3,13 @@ package Fraction;
 // Representing fractions of the form numerator and denominator
 // The object should be immutable.
 
+
 public interface Fraction extends Comparable<Fraction> {
 
     public Fraction add(Fraction f);
 //    Returns a new Fraction that is the SUM of this and the parameter:
 //    a/b + c/d = (ad + bc)/bd
+
 
     public Fraction subtract(Fraction f);
 //    Returns a new Fraction that is the DIFFERENCE between this and the parameter:
