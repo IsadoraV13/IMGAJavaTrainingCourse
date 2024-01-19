@@ -4,8 +4,7 @@ package Fraction;
 // The object should be immutable.
 
 
-public interface Fraction {
-    //extends Comparable<Fraction>
+public interface Fraction extends Comparable<Fraction> {
 
     public Fraction add(Fraction f);
 //    Returns a new Fraction that is the SUM of this and the parameter:
@@ -51,4 +50,5 @@ public interface Fraction {
 //    Returns a String of the form numerator/denominator (n/d). However, if d is equal to 1, just return n.
 //    The returned String should not contain any blanks.
 //    If the fraction represents a negative number, a minus sign should precede n.
+
 }
