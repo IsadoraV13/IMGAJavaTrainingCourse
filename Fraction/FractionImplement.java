@@ -18,15 +18,16 @@ public class FractionImplement implements Fraction{
     //    The constructor should throw an ArithmeticException if the denominator is zero.
     //    Normalize the fraction as you create it.
     /* 
-    I thought it might be better to throw an IllegalArgumentException - happy to get feedback
+    I thought it might be better to throw an IllegalArgumentException as opposed to going one step further and trying
+    to a computation that we know would result in an ArithmeticException - happy to discuss/get feedback.
      */
     public FractionImplement(int numerator, int denominator) throws IllegalArgumentException {
         if (denominator == 0) {
             throw new IllegalArgumentException("denominator cannot be zero");
         }
         int[] fractionArray = normalise(numerator, denominator);
-        this.numerator = fractionArray[0];
-        this.denominator = fractionArray[1];
+        this. numerator = fractionArray[0];
+        this. denominator = fractionArray[1];
     }
 
     // overloaded constructor to take a single int as numerator
@@ -35,24 +36,27 @@ public class FractionImplement implements Fraction{
         this.denominator = 1;
     }
 
-    // overloaded constructor to take strings
     /*
-    I'm learning about streams and still struggling, so wanted to try to use it here.
-    I'm still not entirely comfortable with method references so although IntelliJ suggested using that instead of
-    lambdas, I stuck with lambdas
+    1) I'm learning about streams and still struggling, so wanted to try to use it here.
+    2) I'm still not entirely comfortable with method references so although IntelliJ suggested using that instead of
+    lambdas, I stuck with lambdas as they are easier for me to read at this stage
+    3) I mentioned to Rich that my code was not yet solving for scenarios like "   2/  /  / 4  " and he suggested I
+    explore regex - he did not help me solve it, so I went and researched it. I implemented in stages (i.e. initially
+    it worked for one edge case, but not the next one, so I did it various iterations)
      */
+    // overloaded constructor to take strings
     public FractionImplement(String fractionNumsAsStrings) throws IllegalArgumentException {
-        //Todo: currently doesn't work for "2 / / 4"
-        int [] intArray = Stream.of(fractionNumsAsStrings.split("/", 0))
-                .map(s -> s.strip())
+        int [] intArray = Stream.of(fractionNumsAsStrings.replaceAll("\\s","") // remove whitespace
+                        .replaceAll("/{2,}", "/") // remove any "//" left after whitespace removed
+                        .split("/", 0))// split to get numbers on either side of "/"
                 .mapToInt(s -> Integer.parseInt(s))
                 .toArray();
         if (intArray.length > 2)  {
             throw new IllegalArgumentException("please only specify two numbers separated by '/' ");
         }
-        int num = intArray[0];
+        int num  = intArray[0];
         int denom = intArray[1];
-        int [] fractionArray = normalise(num, denom);
+        int[] fractionArray = normalise(num, denom);
         this.numerator = fractionArray[0];
         this.denominator = fractionArray[1];
     }
@@ -88,12 +92,14 @@ public class FractionImplement implements Fraction{
         return reduce(denom, num % denom);
 
     }
-    public int[] normalise(int num, int denom) {
+    private int[] normalise(int num, int denom) {
         // deal with negatives first
+        System.out.println("num: " + num);
+        System.out.println("den: " + denom);
         if (num < 0) {
             if (denom < 0) { // i.e. if both are negative
-                num = num * -1;
-                denom = denom * -1;
+                num *= -1;
+                denom *= -1;
             } // no else statement as we do not need to do anything if only the num is negative
         } else if (denom < 0) { // i.e. num is positive (or zero) and only denom is -ve
             num = num * -1;
@@ -108,6 +114,7 @@ public class FractionImplement implements Fraction{
 
         System.out.println("num = " + num + ", denom = " + denom);
         return intArray;
+
     }
 
 
