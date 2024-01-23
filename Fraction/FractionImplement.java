@@ -19,7 +19,7 @@ public class FractionImplement implements Fraction{
     //    Normalize the fraction as you create it.
     /* 
     I thought it might be better to throw an IllegalArgumentException as opposed to going one step further and trying
-    to a computation that we know would result in an ArithmeticException - happy to discuss/get feedback.
+    a computation that we know would result in an ArithmeticException - happy to get feedback/discuss.
      */
     public FractionImplement(int numerator, int denominator) throws IllegalArgumentException {
         if (denominator == 0) {
@@ -46,14 +46,7 @@ public class FractionImplement implements Fraction{
      */
     // overloaded constructor to take strings
     public FractionImplement(String fractionNumsAsStrings) throws IllegalArgumentException {
-        int [] intArray = Stream.of(fractionNumsAsStrings.replaceAll("\\s","") // remove whitespace
-                        .replaceAll("/{2,}", "/") // remove any "//" left after whitespace removed
-                        .split("/", 0))// split to get numbers on either side of "/"
-                .mapToInt(s -> Integer.parseInt(s))
-                .toArray();
-        if (intArray.length > 2)  {
-            throw new IllegalArgumentException("please only specify two numbers separated by '/' ");
-        }
+        int[] intArray = convertStringInputToIntArray(fractionNumsAsStrings);
         int num  = intArray[0];
         int denom = intArray[1];
         int[] fractionArray = normalise(num, denom);
@@ -69,18 +62,14 @@ public class FractionImplement implements Fraction{
         return denominator;
     }
 
-    //    Normalize the fraction as you create it.
-    //    For instance, if the parameters are (8, -12), create a Fraction with numerator -2 and denominator 3.
-    //    Create a HELPER to reduce the fraction form, finding the greatest common divisor and returning the new numbers.
-    //    Two integers arguments are needed, and they must be given in the correct order - numerator, and denominator.
-
-
 
     // find greatest common denominator
     /*
     I found this code online. In the past, I struggled to re-use code because I felt like I needed to either write it
     myself or fully understand
      */
+    //    Create a HELPER to reduce the fraction form, finding the greatest common divisor and returning the new numbers.
+    //    Two integers arguments are needed, and they must be given in the correct order - numerator, and denominator.
     private int reduce(int num, int denom)
     {
         if (denom == 0) {
@@ -90,8 +79,11 @@ public class FractionImplement implements Fraction{
             return num;
         }
         return reduce(denom, num % denom);
-
     }
+
+
+    //    Normalize the fraction as you create it.
+    //    For instance, if the parameters are (8, -12), create a Fraction with numerator -2 and denominator 3.
     private int[] normalise(int num, int denom) {
         // deal with negatives first
         System.out.println("num: " + num);
@@ -114,7 +106,19 @@ public class FractionImplement implements Fraction{
 
         System.out.println("num = " + num + ", denom = " + denom);
         return intArray;
+    }
 
+
+    private int[] convertStringInputToIntArray(String fractionNumsAsStrings) {
+        int [] intArray = Stream.of(fractionNumsAsStrings.replaceAll("\\s","") // remove whitespace
+                        .replaceAll("/{2,}", "/") // remove any "//" left after whitespace removed
+                        .split("/", 0))// split to get numbers on either side of "/"
+                .mapToInt(s -> Integer.parseInt(s))
+                .toArray();
+        if (intArray.length > 2)  {
+            throw new IllegalArgumentException("please only specify two numbers separated by '/' ");
+        }
+        return intArray;
     }
 
 
