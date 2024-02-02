@@ -38,12 +38,15 @@ public interface Fraction extends Comparable<Fraction> {
 //    Returns true if object o is a Fraction equal to this, and false in all other cases.
 
 
-//    @Override
-//    public int compareTo(Fraction f);
+    @Override
+    public int compareTo(Fraction f);
 //    Returns:
 //      - 1 if this is less than fraction o
 //      0 if it's equal
 //      1 if it's greater than fraction o
+
+    //    Returns true if object o is a Fraction equal to this, and false in all other cases.
+    boolean equals(Fraction f);
 
     @Override
     public String toString();

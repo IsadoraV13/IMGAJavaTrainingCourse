@@ -1,8 +1,6 @@
 package Fraction;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class FractionImplement implements Fraction{
@@ -12,6 +10,9 @@ public class FractionImplement implements Fraction{
 //    2- whole number (a int representing the numerator and the denominator is implicit 1)
 //    3 - a string containing the numerator and the denominator OR a whole number
 
+    /*
+    I have made this class Immutable by not having setters. I've used final for the instance variables
+     */
     private final int numerator;
     private final int denominator;
 
@@ -26,8 +27,8 @@ public class FractionImplement implements Fraction{
             throw new IllegalArgumentException("denominator cannot be zero");
         }
         int[] fractionArray = normalise(numerator, denominator);
-        this. numerator = fractionArray[0];
-        this. denominator = fractionArray[1];
+        this.numerator = fractionArray[0];
+        this.denominator = fractionArray[1];
     }
 
     // overloaded constructor to take a single int as numerator
@@ -48,7 +49,11 @@ public class FractionImplement implements Fraction{
     public FractionImplement(String fractionNumsAsStrings) throws IllegalArgumentException {
         int[] intArray = convertStringInputToIntArray(fractionNumsAsStrings);
         int num  = intArray[0];
-        int denom = intArray[1];
+        int denom = 1;
+        if (intArray.length == 2) {
+            denom = intArray[1];
+        }
+
         int[] fractionArray = normalise(num, denom);
         this.numerator = fractionArray[0];
         this.denominator = fractionArray[1];
@@ -66,7 +71,8 @@ public class FractionImplement implements Fraction{
     // find greatest common denominator
     /*
     I found this code online. In the past, I struggled to re-use code because I felt like I needed to either write it
-    myself or fully understand
+    myself or fully understand. So it felt like a positive step forward that I was able to take the code, sanity check
+    it, incorporate in my code and move on.
      */
     //    Create a HELPER to reduce the fraction form, finding the greatest common divisor and returning the new numbers.
     //    Two integers arguments are needed, and they must be given in the correct order - numerator, and denominator.
@@ -86,8 +92,7 @@ public class FractionImplement implements Fraction{
     //    For instance, if the parameters are (8, -12), create a Fraction with numerator -2 and denominator 3.
     private int[] normalise(int num, int denom) {
         // deal with negatives first
-        System.out.println("num: " + num);
-        System.out.println("den: " + denom);
+        System.out.println("Before normalisation, num: " + num + ", denom: " + denom);
         if (num < 0) {
             if (denom < 0) { // i.e. if both are negative
                 num *= -1;
@@ -104,7 +109,7 @@ public class FractionImplement implements Fraction{
         denom = denom / greatestCommonDenom;
         int[] intArray = {num, denom};
 
-        System.out.println("num = " + num + ", denom = " + denom);
+        System.out.println("After normalisation, num: " + num + ", denom: " + denom);
         return intArray;
     }
 
@@ -127,10 +132,8 @@ public class FractionImplement implements Fraction{
     @Override
     public Fraction add(Fraction f) {
         FractionImplement fImpl = (FractionImplement) f; /*  Struggled with this part, thankfully Rudy helped me :) */
-        int computeNum = (numerator * fImpl.getDenominator()) + (denominator * fImpl.getNumerator());
-        System.out.println("num: " + computeNum);
-        int computeDenom = this.denominator * fImpl.getDenominator();
-        System.out.println("den: " + computeDenom);
+        int computeNum = (this.getNumerator() * fImpl.getDenominator()) + (this.getDenominator() * fImpl.getNumerator());
+        int computeDenom = this.getDenominator() * fImpl.getDenominator();
         return new FractionImplement(computeNum, computeDenom);
     }
 
@@ -139,8 +142,8 @@ public class FractionImplement implements Fraction{
     //    a/b - c/d = (ad - bc)/bd
     public Fraction subtract(Fraction f) {
         FractionImplement fImpl = (FractionImplement) f;
-        int computeNum = (this.numerator * fImpl.getDenominator()) - (this.denominator * fImpl.getNumerator());
-        int computeDenom = this.denominator * this.numerator;
+        int computeNum = (this.getNumerator() * fImpl.getDenominator()) - (this.getDenominator() * fImpl.getNumerator());
+        int computeDenom = this.getDenominator() * fImpl.getDenominator();
         return new FractionImplement(computeNum, computeDenom);
     }
 
@@ -150,8 +153,8 @@ public class FractionImplement implements Fraction{
     @Override
     public Fraction multiply(Fraction f) {
         FractionImplement fImpl = (FractionImplement) f;
-        int computeNum = (this.numerator * this.denominator) / (fImpl.getNumerator() * fImpl.getDenominator());
-        int computeDenom = this.denominator * fImpl.getDenominator();
+        int computeNum = this.getNumerator() * fImpl.getNumerator();
+        int computeDenom = this.getDenominator() * fImpl.getDenominator();
         return new FractionImplement(computeNum, computeDenom);
     }
 
@@ -160,38 +163,68 @@ public class FractionImplement implements Fraction{
     //    (a/b) / (c/d) = (a*d)/(b*c)
     @Override
     public Fraction divide(Fraction f) {
-        return null;
+        FractionImplement fImpl = (FractionImplement) f;
+        int computeNum = this.getNumerator() * fImpl.getDenominator();
+        int computeDenom = this.getDenominator() * fImpl.getNumerator();
+        return new FractionImplement(computeNum, computeDenom);
     }
 
     //    Returns a new Fraction that is the ABSOLUTE value of this fraction
     @Override
-    public Fraction abs() {
-        return null;
+    public Fraction abs() { /* */
+        int num = this.getNumerator();
+        if (this.getNumerator() < 0) {
+            num = this.getNumerator() * -1;
+        }
+        return new FractionImplement(num, this.getDenominator());
     }
 
 
     //    Returns a new Fraction that has the same numeric value of this fraction, but the opposite sign.
     @Override
     public Fraction negate() {
-        return null;
+        int num = this.getNumerator() * -1;
+        return new FractionImplement(num, this.getDenominator());
     }
 
 
     //    Return the inverse. The inverse of a/b is b/a.
     @Override
-    public Fraction inverse() {
-        return null;
+    public Fraction inverse() { /*/ my understanding is that passing (a, -b) to the constructor returns -a/b, and that
+    therefore the inverse is -b/a */
+        int num = this.getDenominator();
+        int denom = this.getNumerator();
+        return new FractionImplement(num, denom);
     }
 
+    //    Returns:
+    //      - 1 if this is less than fraction o
+    //      0 if it's equal
+    //      1 if it's greater than fraction o
+
+    /*
+    I was not sure how to implement this - what are the different ways?
+     */
     @Override
-    public int compareTo(Fraction f) {
-        return 0;
+    public int compareTo(Fraction o) {
+        Fraction difference = this.subtract(o);
+        if (difference.toString().charAt(0) == '-') {
+            return -1;
+        } else if (difference.toString().equals("0/1")) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     //    Returns true if object o is a Fraction equal to this, and false in all other cases.
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public boolean equals(Fraction f) {
+        Fraction difference = this.subtract(f);
+        if (difference.toString().equals("0/1")) {
+            return true;
+        }
+        return false;
     }
 
     @Override
