@@ -7,5 +7,23 @@ package BasicConcepts.Logic2;
 //        MakeChocolate(4, 1, 10) → -1
 //        MakeChocolate(4, 1, 7) → 2
 
+/* I think there is missing info for this question. I have assumed that the parameters (a, b, c) are
+(number of small bars, number of big bars, goal)
+*/
 public class MakeChocolate {
+    public static void main(String[] args) {
+
+        System.out.println(makeChoc(4, 1, 9));
+        System.out.println(makeChoc(4, 1, 10));
+        System.out.println(makeChoc(4, 1, 7));
+    }
+
+    public static int makeChoc(int small, int big, int goal) {
+        int numberOfSmallBarsNeeded = goal - (big * 5);
+        if (numberOfSmallBarsNeeded > small) {
+            return -1;
+        } else {
+            return numberOfSmallBarsNeeded;
+        }
+    }
 }
